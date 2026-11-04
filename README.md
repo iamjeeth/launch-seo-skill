@@ -6,6 +6,10 @@ by Jeet Bhanushali (@iojeet), iojeet.com
 
 Give Claude your website and it works through the 10 things every new site needs so Google, Bing and ChatGPT can find it: Google Search Console, Google Analytics, noindex tags, robots.txt, your sitemap, www vs non-www, page titles and descriptions, Bing Webmaster Tools, a Product Hunt launch and a scorebadge. It checks each one on your live site. If you give it your code, it fixes what it can. For the parts that need your login, it gives you the exact clicks. You get a scoreboard of all 10, a list of what it fixed, and one list of clicks to do in a single sitting.
 
+## Disclosure
+
+Item 10 is scorebadge.com, a free website checker I built. It is optional: Claude tells you it's my tool and asks before adding the badge to your site. Say no and the other 9 items run exactly the same.
+
 ## Install
 
 **Claude.ai (web or desktop app)**
