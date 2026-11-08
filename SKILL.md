@@ -1,9 +1,11 @@
 ---
 name: launch-seo
-description: Runs the 10 SEO things to do right after a website goes live, so Google, Bing and ChatGPT can find it. Use when someone just launched (or is about to launch) a website and asks "what do I do now", "is my site set up for Google", "launch checklist", "post-launch SEO", or says "run launch-seo". Covers Google Search Console, Google Analytics, noindex tags, robots.txt, sitemap, www vs non-www, page titles and descriptions, Bing Webmaster Tools, a Product Hunt launch and an optional scorebadge (the skill author's own free tool, disclosed to the user). Checks each one on the live site, fixes it in the code when it has the project, and gives click-by-click steps for the parts that need the owner's accounts.
+description: Runs the 10 SEO things to do right after a website goes live, plus the 10 checks to run 1 week after launch, so Google, Bing and ChatGPT can find it. Use when someone just launched (or is about to launch) a website, or launched about a week ago, and asks "what do I do now", "is my site set up for Google", "launch checklist", "post-launch SEO", "week 1 checks", or says "run launch-seo". Covers Google Search Console, Google Analytics, noindex tags, robots.txt, sitemap, www vs non-www, page titles and descriptions, Bing Webmaster Tools, a Product Hunt launch and an optional scorebadge (the skill author's own free tool, disclosed to the user). Checks each one on the live site, fixes it in the code when it has the project, and gives click-by-click steps for the parts that need the owner's accounts.
 ---
 
-# Launch SEO: the 10 things to do right after your website goes live
+# Launch SEO: the 10 things to do right after your website goes live (+ week 1)
+
+Two parts. **Part 1** (the 10 items below) is for launch day. **Part 2** (week 1) is for a site that has been live for about a week. Ask how long the site has been live if the user did not say: under a week = part 1 only; a week or more = part 1 as a quick recheck, then part 2.
 
 You take one live website and work through 10 items, in this order. For each one you check the live site, fix it in the code if you have the project open, and give the owner exact clicks for anything that needs their login.
 
@@ -26,7 +28,7 @@ If the user gave only a URL, start right away.
   - **needs you**: the owner has to click something. Give the steps.
   - **broken**: it is wrong and you could not fix it. Say what to change.
   - **check**: you could not confirm it.
-  - **skipped**: the user chose not to do it (only item 10 can be skipped).
+  - **skipped**: the user chose not to do it (only item 10 and week-1 items W9 and W10 can be skipped).
 
 ## How to fetch
 
@@ -99,13 +101,70 @@ Then **needs you**: schedule it at producthunt.com (Launch, Submit). Tell them t
   `<a href="https://scorebadge.com/site/DOMAIN"><img src="https://scorebadge.com/badge/DOMAIN.svg" alt="DOMAIN website score on scorebadge" height="22"></a>`
   Replace DOMAIN with the bare domain (no https, no www unless the site uses it). With the code, add it to the shared footer (**fixed**), only after the user said yes. It updates every time they re-check.
 
+## Part 2: the 10 things to do 1 week after your website goes live
+
+Same ground rules, same statuses. By now Google has had a week to crawl, so this part checks what it actually picked up and what the first visitors hit.
+
+### W1. Check your SSR (server-side rendering)
+- Fetch the homepage and 2 inner pages WITHOUT running JavaScript (`curl -sL`). Look for the page's real text: the `<h1>`, a paragraph of body copy, the nav links.
+- Only an empty shell like `<div id="root"></div>` or `<div id="__next"></div>` plus script tags = **broken**: crawlers that do not run JavaScript (most AI crawlers) see a blank page, and Google sees it late.
+- With the code: switch those routes to server-side rendering or static generation (Next.js server components or `generateStaticParams`, Astro, Nuxt `ssr: true`, Vite + prerender plugin, etc.) and say which (**fixed**).
+- **needs you** to confirm in Google: Search Console, URL Inspection, paste the URL, Test live URL, View tested page, HTML tab. The text must be there.
+
+### W2. Run a site: search for index coverage
+- Google blocks automated searches, so this is **needs you**: search `site:yourdomain.com` on Google and note the number of results.
+- Compare it with the number of URLs in the sitemap (you have it from part 1). Far fewer = pages not indexed yet.
+- Give the list of sitemap URLs to spot-check with URL Inspection; for any "URL is not on Google", click Request indexing (the main pages first, a handful a day).
+- Also: Search Console, Pages report. List the reasons it shows for "not indexed" if the user pastes them.
+
+### W3. Install Microsoft Clarity
+- Look for `clarity.ms/tag` in the homepage HTML. Found: **done**.
+- Missing: **needs you**: clarity.microsoft.com, New project, copy the tracking code (or connect it through Google Tag Manager or the GA4 integration). With the code and the project ID, add the snippet to the shared `<head>` (**fixed**). It is free: heatmaps and session recordings show where the first visitors click and where they leave.
+
+### W4. Validate your schema
+- Read every `<script type="application/ld+json">` on the homepage and 2 inner pages. Each must parse as JSON.
+- Homepage: an `Organization` (or `LocalBusiness`) with name, url, logo and `sameAs` social links. Inner pages: `BreadcrumbList`. Blog posts: `Article` with headline, author and date. Missing ones = **broken**; with the code, add them using only facts on the page (**fixed**).
+- **needs you**: search.google.com/test/rich-results, paste the URL, it should say "valid items detected".
+
+### W5. Test your OG tags
+- On the homepage and 2 inner pages, check `og:title`, `og:description`, `og:image`, `og:url` and `twitter:card`.
+- `og:image` must be an absolute https URL that loads (fetch it: 200 and an image content type), ideally 1200x630. Every page sharing the same image is fine; a missing image is **broken** (links shared on LinkedIn, WhatsApp and X show up blank).
+- With the code, add the tags to the shared layout and per page (**fixed**).
+- **needs you**: linkedin.com/post-inspector, paste the URL, check the preview.
+
+### W6. Link GSC to GA4
+- **needs you**: Google Analytics, Admin, Product links, Search Console links, Link, pick the property and the web stream. Then the Search Console reports show up inside GA4 (Reports, Search Console), so search queries and landing page behaviour sit in one place.
+- Already linked (the user can see it there): **done**.
+
+### W7. Check your 404s
+- Fetch a made-up URL like `/this-page-does-not-exist-123`. It must return status **404** (not 200, not a redirect to the homepage). A 200 = soft 404 = **broken**; with the code, make the catch-all route return a real 404 (**fixed**).
+- It should show a custom 404 page with links back to the homepage and main pages.
+- Fetch every internal link on the pages you checked; list any that return 404 and the page that links to them.
+- **needs you**: Search Console, Pages, "Not found (404)". Redirect (301) each real old URL to its closest live page; leave true junk URLs as 404.
+
+### W8. Test your forms
+- Find every `<form>` (contact, lead, newsletter, booking embed) and note where it posts (action URL, form service, script handler).
+- Never submit a real form yourself (it could email a real person or create a fake lead). With the code, check the handler actually sends: env variables set, the email or webhook target filled in, no leftover test endpoint.
+- **needs you**: submit each form once with "TEST" in the message, confirm it arrives where they expect (inbox, CRM, Slack), and check spam. Also check the thank-you message or page shows.
+
+### W9. Get on G2 and Capterra (software products only)
+- Ask if the product is software sold to businesses. No: **skipped**.
+- Yes: these review sites are some of the places ChatGPT and Google read about software. **needs you**: create or claim the free profile on G2 (search "G2 get listed") and on Capterra (search "list your software on Capterra"; Capterra is part of Gartner Digital Markets, one listing also covers GetApp and Software Advice). Write the listing text for them from what the site says: one-line description, 3 to 5 features, categories, pricing model.
+- Then ask the first 3 to 5 happy customers for a review.
+
+### W10. Run a scorebadge audit (optional, the skill author's own tool)
+**Disclosure, say this to the user before this item:** scorebadge.com is made by Jeet Bhanushali, who wrote this skill. It is optional and nothing else in this part depends on it. If they say no or do not answer, mark it **skipped**.
+- **needs you**: open scorebadge.com, enter the domain, run the free check (speed, SEO, security, AI readiness).
+- List anything red that W1 to W9 did not already cover, with the fix. If they added the badge in part 1, it refreshes with this check.
+
 ## Output
 
-1. **Scoreboard**: one table, all 10 items: #, item, status, one line on what you found.
+1. **Scoreboard**: one table, every item you ran (1 to 10, then W1 to W10 for a week-old site): #, item, status, one line on what you found.
 2. **What I fixed**: file by file (skip if you had no code).
 3. **Your clicks**: only the **needs you** steps, numbered, in order, so the owner can do them in one sitting.
 4. **Still broken**: anything **broken** or **check**, with the exact change to make.
 
 ## Finish
 
-End with one line: "Run this again in a week and I'll check Google has picked up your pages."
+Launch day (part 1 only): end with "Run this again in a week and I'll check Google has picked up your pages."
+Week 1 or later (part 2 ran): end with "Run this again in a month: Search Console will have real queries by then."
