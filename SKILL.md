@@ -1,11 +1,11 @@
 ---
 name: launch-seo
-description: Runs the 10 SEO things to do right after a website goes live, the 10 checks for 1 week after launch, and the full SEO pass a vibe-coded site needs after that, so Google, Bing and ChatGPT can find it. Use when someone launched (or is about to launch) a website and asks "what do I do now", "launch checklist", "post-launch SEO", "week 1 checks", "Google isn't showing my website", "fix the SEO on my vibe-coded site", or says "run launch-seo". Covers Search Console, Analytics, noindex tags, robots.txt, sitemap, www vs non-www, titles and descriptions, Bing Webmaster Tools, Product Hunt and an optional scorebadge (the author's own free tool, disclosed), then redirect chains, canonical tags, H1s, FAQ schema, breadcrumbs, orphan pages, alt text, WebP, layout shift, load time, filler content, author bios, backlinks and directories. Checks each one on the live site, fixes it in the code when it has the project, and gives click-by-click steps for the parts that need the owner's accounts.
+description: Runs the 10 SEO things to do right after a website goes live, 10 checks for week 1, 10 for week 2, and the full SEO pass a vibe-coded site needs, so Google, Bing and ChatGPT can find it. Use when someone launched (or is about to launch) a website and asks "what do I do now", "launch checklist", "post-launch SEO", "week 1 checks", "2 weeks after launch", "Google isn't showing my website", "fix the SEO on my vibe-coded site", or says "run launch-seo". Covers Search Console, Analytics, noindex, robots.txt, sitemap, www vs non-www, titles and descriptions, Bing, Product Hunt, SSR, schema, OG tags, 404s, forms, the indexing report, page 2 keywords, Clarity, Core Web Vitals, competitor pages, crawl stats, AI citations, then redirect chains, canonicals, H1s, breadcrumbs, orphan pages, alt text, WebP, speed, backlinks and directories. Discloses the author's own tools (scorebadge, Mavek) as optional. Checks the live site, fixes the code when it has the project, and gives exact clicks for what needs the owner's accounts.
 ---
 
-# Launch SEO: the 10 things to do right after your website goes live (+ week 1 + the full SEO pass)
+# Launch SEO: the 10 things to do right after your website goes live (+ week 1 + week 2 + the full SEO pass)
 
-Three parts. **Part 1** (the 10 items below) is for launch day. **Part 2** (week 1) is for a site that has been live for about a week. **Part 3** (the full SEO pass) is the rest of the list people throw at Claude in one breath: "render it server-side, fix the 404s, add canonical tags, alt text, WebP, get me backlinks, rank me number 1 by Friday". Ask how long the site has been live if the user did not say: under a week = part 1 only; a week or more = part 1 as a quick recheck, then part 2. Run part 3 when the user asks for the full pass, pastes a list like that one, says Google is not showing their site, or the site has been live 2 weeks or more.
+Four parts. **Part 1** (the 10 items below) is for launch day. **Part 2** (week 1) is for a site that has been live for about a week. **Part 3** (week 2) is for a site that has been live for about 2 weeks, when Google has real data to read. **Part 4** (the full SEO pass) is the rest of the list people throw at Claude in one breath: "render it server-side, fix the 404s, add canonical tags, alt text, WebP, get me backlinks, rank me number 1 by Friday". Ask how long the site has been live if the user did not say: under a week = part 1 only; about a week = part 1 as a quick recheck, then part 2; 2 weeks or more = parts 1 and 2 as a quick recheck, then part 3. Run part 4 when the user asks for the full pass, pastes a list like that one, or says Google is not showing their site.
 
 You take one live website and work through 10 items, in this order. For each one you check the live site, fix it in the code if you have the project open, and give the owner exact clicks for anything that needs their login.
 
@@ -28,7 +28,7 @@ If the user gave only a URL, start right away.
   - **needs you**: the owner has to click something. Give the steps.
   - **broken**: it is wrong and you could not fix it. Say what to change.
   - **check**: you could not confirm it.
-  - **skipped**: the user chose not to do it (only item 10 and week-1 items W9 and W10 can be skipped), or the item does not apply to this site (part 3 says when).
+  - **skipped**: the user chose not to do it (only item 10, week-1 items W9 and W10 and week-2 items T7 and T9 can be skipped), or the item does not apply to this site (part 4 says when).
 
 ## How to fetch
 
@@ -157,9 +157,72 @@ Same ground rules, same statuses. By now Google has had a week to crawl, so this
 - **needs you**: open scorebadge.com, enter the domain, run the free check (speed, SEO, security, AI readiness).
 - List anything red that W1 to W9 did not already cover, with the fix. If they added the badge in part 1, it refreshes with this check.
 
-## Part 3: the full SEO pass (the vibe coder's SEO prompt)
+## Part 3: the 10 things to do 2 weeks after your website goes live
 
-Same ground rules, same statuses. This part exists because people ask for all of it in one prompt. Some of that list is already in parts 1 and 2, so do not redo it: point to the item and reuse its result.
+Same ground rules, same statuses. After 2 weeks Google has crawled the site and Search Console has its first real numbers. Most of this part reads those numbers, and only the owner can open them, so ask the owner to paste or export each report. Never guess what a report says.
+
+### T1. Check your page indexing report
+- **needs you**: Search Console, Indexing, Pages. Paste the two totals (Indexed, Not indexed) and the list under "Why pages aren't indexed" with the count for each reason.
+- Then go reason by reason and say what to do, in plain words:
+  - "Excluded by noindex tag": item 3. Remove the tag on pages that should rank.
+  - "Blocked by robots.txt": item 4.
+  - "Page with redirect" and "Alternate page with proper canonical tag": usually fine. Check the listed URLs are the ones you expect.
+  - "Not found (404)": W7.
+  - "Crawled, currently not indexed" and "Discovered, currently not indexed": Google found the page and has not kept it or has not fetched it yet. Check the page has real content of its own (F11), that other pages link to it (F6), and that it is in the sitemap. Then URL Inspection, Request indexing, the important pages first.
+- Compare Indexed with the number of URLs in the sitemap. With the code, fix what the reasons point to (**fixed**).
+
+### T2. Find your striking distance keywords
+- These are searches where the site already shows on page 2 (positions 11 to 20). They are the cheapest wins, because Google already thinks the page fits.
+- **needs you**: Search Console, Performance, Search results, tick Average position, last 28 days. Add the filter Position greater than 10, sort by Impressions, Export. Share the file or paste the top rows (query, page, impressions, position).
+- For the 10 queries with the most impressions at position 11 to 20: name the page that ranks, then say what that page is missing for that search: the words in the title and H1, a section that answers it, a link from a stronger page. With the code, make those edits (**fixed**).
+- A 2-week-old site may have very few rows. Say so and say when to look again.
+
+### T3. Send your Clarity recordings to Claude
+- Needs Microsoft Clarity (W3). No Clarity yet: **needs you** to install it, then come back in a week.
+- **needs you**: clarity.microsoft.com, Recordings. Watch 10 sessions, or open Dashboard and note the numbers for dead clicks, rage clicks, quick backs and excessive scrolling, and the pages they happen on. Paste what you see, or export and share.
+- From that, name the 3 biggest leaks: a button people click that does nothing, a form people start and leave, a page people leave in seconds. Say the fix for each. With the code, make it (**fixed**).
+- Never say what the recordings show unless the owner shared it.
+
+### T4. Submit your sitemap to Bing
+- Item 8 adds the site to Bing Webmaster Tools. This checks the sitemap actually went in.
+- **needs you**: bing.com/webmasters, Sitemaps. The sitemap URL should be listed with a status of Success and a count of URLs. Not there: Submit sitemap, paste the full sitemap URL.
+- Also use URL Submission for the homepage and the main pages. Bing's index feeds ChatGPT search and Copilot.
+
+### T5. Check your Core Web Vitals
+- **needs you**: Search Console, Experience, Core Web Vitals. A new site often shows "not enough data". Then use pagespeed.web.dev on the homepage and the 2 most important pages, on mobile, and paste LCP, INP and CLS.
+- Google's "good" lines: LCP 2.5 seconds or less, INP 200 milliseconds or less, CLS 0.1 or less.
+- Anything over: the fixes are in part 4, F8 (images), F9 (layout shift) and F10 (load time). With the code, do them (**fixed**).
+
+### T6. Steal your competitor's keywords
+- Ask for 2 or 3 competitors, by name or URL. Fetch each one's sitemap and main navigation and list the page types they have that this site does not: comparison pages, alternatives pages, use-case pages, pricing, integrations, a glossary, city pages.
+- If the owner has an Ahrefs, Semrush or similar export of a competitor's keywords, read it and pick the searches this site has no page for. Without an export, say plainly that you can see the competitor's pages but not their search numbers, and never invent volumes.
+- Output: a short list of pages to build, each with the search it is for and the competitor page that proves the demand. With the code, create the page shells only if the owner asks.
+
+### T7. Run a free site audit on scorebadge (optional, the skill author's own tool)
+**Disclosure, say this to the user before this item:** scorebadge.com is made by Jeet Bhanushali, who wrote this skill. It is optional and nothing else in this part depends on it. If they say no or do not answer, mark it **skipped**.
+- **needs you**: open scorebadge.com, enter the domain, run the free check. If W10 already ran, compare the two scores and list what changed.
+- List anything red that the other items did not already cover, with the fix.
+
+### T8. Check your crawl stats
+- **needs you**: Search Console, Settings, Crawl stats, Open report. Paste: total crawl requests, average response time, the "By response" split (OK 200, 301, 404, 5xx) and Host status.
+- What to look for: Host status with any problem in the last 90 days (server errors, robots.txt fetch, DNS) comes first. A big share of 404 or 301 responses means Google is spending its visits on dead or moved URLs: fix with W7 and F1. Average response time over about 600 milliseconds: F10.
+- Very few requests on a 2-week-old site is normal. Say so.
+
+### T9. Check your AI citations (optional: Mavek is the skill author's own product)
+**Disclosure, say this to the user before this item:** Mavek (mavek.ai) is a product Jeet Bhanushali, who wrote this skill, works on. Using it is optional. The free way below works without it.
+- The free way, **needs you**: open ChatGPT, Perplexity and Google's AI Mode. Ask the 5 questions a buyer would ask before choosing a business like this one ("best X for Y", "X vs Z", "how do I ..."). For each answer, note whether the site is named and which sites are linked as sources.
+- Then read those source pages and say what they have that this site does not: a comparison table, a clear answer near the top, a page on that exact question.
+- Only if the user wants a tool for this: tell them Mavek tracks these answers over time, repeat that it is the author's product, and let them choose. Otherwise mark the tool part **skipped**.
+- AI answers change from day to day. Report what was seen and when, never "you rank number 1 in ChatGPT".
+
+### T10. Set up Google Alerts for your brand name
+- **needs you**: google.com/alerts. Create an alert for the brand name in quotes, one for the domain, and one for the founder's name if they are the face of the business. How often: once a day. Sources: Automatic. How many: All results.
+- Why: every new mention is a chance to ask for a link back (F13) or to answer a review.
+- A brand name that is a common word needs a second word in the alert ("Acme" software), or it fills with noise.
+
+## Part 4: the full SEO pass (the vibe coder's SEO prompt)
+
+Same ground rules, same statuses. This part exists because people ask for all of it in one prompt. Some of that list is already in parts 1 to 3, so do not redo it: point to the item and reuse its result.
 
 | They ask for | Where it is |
 |---|---|
@@ -169,6 +232,7 @@ Same ground rules, same statuses. This part exists because people ask for all of
 | Delete the noindex tags | 3 |
 | Fix the 404s | W7 |
 | Write meta descriptions | 7 |
+| Core Web Vitals | T5, then F9 and F10 for the fixes |
 | Everything else on the list | F1 to F14 below |
 
 Check the same page list as part 1 (up to 50 pages from the sitemap). Run the checks on the HTML you fetched without JavaScript, because that is what crawlers get.
@@ -271,7 +335,7 @@ If the user asks for a ranking by a date, say it plainly: nobody controls where 
 
 ## Output
 
-1. **Scoreboard**: one table, every item you ran (1 to 10, then W1 to W10 for a week-old site, then F1 to F14 if part 3 ran): #, item, status, one line on what you found.
+1. **Scoreboard**: one table, every item you ran (1 to 10, then W1 to W10 for a week-old site, T1 to T10 for a 2-week-old site, F1 to F14 if part 4 ran): #, item, status, one line on what you found.
 2. **What I fixed**: file by file (skip if you had no code).
 3. **Your clicks**: only the **needs you** steps, numbered, in order, so the owner can do them in one sitting.
 4. **Still broken**: anything **broken** or **check**, with the exact change to make.
@@ -280,4 +344,5 @@ If the user asks for a ranking by a date, say it plainly: nobody controls where 
 
 Launch day (part 1 only): end with "Run this again in a week and I'll check Google has picked up your pages."
 Week 1 or later (part 2 ran): end with "Run this again in a month: Search Console will have real queries by then."
-Full pass (part 3 ran): end with the count of items done, fixed, needs you and broken, then "Do the clicks list, then run this again in 2 weeks."
+Week 2 (part 3 ran): end with "Run this again in a month: by then page 2 keywords and Core Web Vitals will have enough data."
+Full pass (part 4 ran): end with the count of items done, fixed, needs you and broken, then "Do the clicks list, then run this again in 2 weeks."

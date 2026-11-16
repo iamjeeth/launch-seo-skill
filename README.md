@@ -1,4 +1,4 @@
-# launch-seo: the 10 things to do right after your website goes live (+ week 1 + the full SEO pass)
+# launch-seo: the 10 things to do right after your website goes live (+ week 1 + week 2 + the full SEO pass)
 
 by Jeet Bhanushali (@iojeet), iojeet.com
 
@@ -8,11 +8,13 @@ Give Claude your website and it works through the 10 things every new site needs
 
 **Week 1 (new):** run it again a week after launch and it adds 10 more checks: server-side rendering (does a crawler see your content or a blank page), site: index coverage, Microsoft Clarity, schema, Open Graph tags, linking Search Console to GA4, 404s, your forms, G2 and Capterra (software only) and a scorebadge audit.
 
+**Week 2 (new):** two weeks in, Google has real numbers. It walks you through 10 more: the page indexing report, page 2 (striking distance) keywords, Clarity recordings, your sitemap in Bing, Core Web Vitals, competitor pages, a scorebadge audit, crawl stats, AI citations and Google Alerts. Most of these live in your Search Console, so it tells you exactly which report to open and what to paste back.
+
 **The full SEO pass (new):** the rest of the list people throw at Claude in one prompt. Ask for it and it adds 14 more: redirect chains, canonical tags, one H1 per page, FAQ schema, breadcrumbs, orphan pages, alt text, WebP images, layout shift, load time, filler content, author bios, backlinks and directories. It fixes what lives in your code. For backlinks, directories and page speed scores it tells you the truth: what it can't do for you, and the exact steps that are yours. It will not promise you a ranking by Friday.
 
 ## Disclosure
 
-Item 10 is scorebadge.com, a free website checker I built. It is optional: Claude tells you it's my tool and asks before adding the badge to your site. Say no and the other 9 items run exactly the same. The week-1 part has the same optional scorebadge audit (W10).
+Item 10 is scorebadge.com, a free website checker I built. It is optional: Claude tells you it's my tool and asks before adding the badge to your site. Say no and the other 9 items run exactly the same. The week-1 and week-2 parts have the same optional scorebadge audit (W10, T7). The AI citations check (T9) has a free way and mentions Mavek, a product I work on, only if you ask for a tool.
 
 ## Install
 
@@ -42,6 +44,12 @@ Site live for a week already? Say so:
 
 ```
 My site went live a week ago. Run launch-seo on https://www.yoursite.com
+```
+
+Two weeks in?
+
+```
+My site went live 2 weeks ago. Run launch-seo on https://www.yoursite.com
 ```
 
 Want everything in one go?
