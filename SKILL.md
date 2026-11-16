@@ -1,11 +1,11 @@
 ---
 name: launch-seo
-description: Runs the 10 SEO things to do right after a website goes live, plus the 10 checks to run 1 week after launch, so Google, Bing and ChatGPT can find it. Use when someone just launched (or is about to launch) a website, or launched about a week ago, and asks "what do I do now", "is my site set up for Google", "launch checklist", "post-launch SEO", "week 1 checks", or says "run launch-seo". Covers Google Search Console, Google Analytics, noindex tags, robots.txt, sitemap, www vs non-www, page titles and descriptions, Bing Webmaster Tools, a Product Hunt launch and an optional scorebadge (the skill author's own free tool, disclosed to the user). Checks each one on the live site, fixes it in the code when it has the project, and gives click-by-click steps for the parts that need the owner's accounts.
+description: Runs the 10 SEO things to do right after a website goes live, the 10 checks for 1 week after launch, and the full SEO pass a vibe-coded site needs after that, so Google, Bing and ChatGPT can find it. Use when someone launched (or is about to launch) a website and asks "what do I do now", "launch checklist", "post-launch SEO", "week 1 checks", "Google isn't showing my website", "fix the SEO on my vibe-coded site", or says "run launch-seo". Covers Search Console, Analytics, noindex tags, robots.txt, sitemap, www vs non-www, titles and descriptions, Bing Webmaster Tools, Product Hunt and an optional scorebadge (the author's own free tool, disclosed), then redirect chains, canonical tags, H1s, FAQ schema, breadcrumbs, orphan pages, alt text, WebP, layout shift, load time, filler content, author bios, backlinks and directories. Checks each one on the live site, fixes it in the code when it has the project, and gives click-by-click steps for the parts that need the owner's accounts.
 ---
 
-# Launch SEO: the 10 things to do right after your website goes live (+ week 1)
+# Launch SEO: the 10 things to do right after your website goes live (+ week 1 + the full SEO pass)
 
-Two parts. **Part 1** (the 10 items below) is for launch day. **Part 2** (week 1) is for a site that has been live for about a week. Ask how long the site has been live if the user did not say: under a week = part 1 only; a week or more = part 1 as a quick recheck, then part 2.
+Three parts. **Part 1** (the 10 items below) is for launch day. **Part 2** (week 1) is for a site that has been live for about a week. **Part 3** (the full SEO pass) is the rest of the list people throw at Claude in one breath: "render it server-side, fix the 404s, add canonical tags, alt text, WebP, get me backlinks, rank me number 1 by Friday". Ask how long the site has been live if the user did not say: under a week = part 1 only; a week or more = part 1 as a quick recheck, then part 2. Run part 3 when the user asks for the full pass, pastes a list like that one, says Google is not showing their site, or the site has been live 2 weeks or more.
 
 You take one live website and work through 10 items, in this order. For each one you check the live site, fix it in the code if you have the project open, and give the owner exact clicks for anything that needs their login.
 
@@ -28,7 +28,7 @@ If the user gave only a URL, start right away.
   - **needs you**: the owner has to click something. Give the steps.
   - **broken**: it is wrong and you could not fix it. Say what to change.
   - **check**: you could not confirm it.
-  - **skipped**: the user chose not to do it (only item 10 and week-1 items W9 and W10 can be skipped).
+  - **skipped**: the user chose not to do it (only item 10 and week-1 items W9 and W10 can be skipped), or the item does not apply to this site (part 3 says when).
 
 ## How to fetch
 
@@ -157,9 +157,121 @@ Same ground rules, same statuses. By now Google has had a week to crawl, so this
 - **needs you**: open scorebadge.com, enter the domain, run the free check (speed, SEO, security, AI readiness).
 - List anything red that W1 to W9 did not already cover, with the fix. If they added the badge in part 1, it refreshes with this check.
 
+## Part 3: the full SEO pass (the vibe coder's SEO prompt)
+
+Same ground rules, same statuses. This part exists because people ask for all of it in one prompt. Some of that list is already in parts 1 and 2, so do not redo it: point to the item and reuse its result.
+
+| They ask for | Where it is |
+|---|---|
+| Render it server-side | W1 |
+| Generate a sitemap, submit it to Search Console | 5 and 1 |
+| Unblock Googlebot and AI bots in robots.txt | 4 |
+| Delete the noindex tags | 3 |
+| Fix the 404s | W7 |
+| Write meta descriptions | 7 |
+| Everything else on the list | F1 to F14 below |
+
+Check the same page list as part 1 (up to 50 pages from the sitemap). Run the checks on the HTML you fetched without JavaScript, because that is what crawlers get.
+
+### F1. Kill the redirect chains
+- For every URL in the sitemap and every internal link you found, follow the redirects (`curl -sIL`). Count the hops.
+- Right: 0 hops for sitemap URLs and internal links. One 301 is fine for old URLs people may still have bookmarked.
+- **broken**: 2 or more hops, any 302 or 307 on a permanent move, a redirect loop, or an internal link that points at a URL that redirects.
+- With the code: point each chain straight at the final URL in the redirect config, and update the internal links so they use the final URL (**fixed**). List every chain: start, each hop, end.
+
+### F2. Add canonical tags
+- Every page needs one `<link rel="canonical">` in the `<head>`: an absolute https URL, on the host that won in item 6, pointing at the page itself.
+- **broken**: missing, more than one, a relative URL, pointing at the homepage from every page (a common template mistake that tells Google the whole site is one page), or pointing at a URL that redirects or 404s.
+- Pages that are true copies (print views, filtered lists, UTM versions) should point at the main version.
+- With the code: set it once in the shared layout from the page's own path (**fixed**).
+
+### F3. One H1 per page
+- Count the `<h1>` tags on every page.
+- Right: exactly one, visible, saying what the page is about in the words a customer would search.
+- **broken**: none, more than one, an H1 that is only the logo or the brand name on an inner page, or an H1 hidden with CSS. Never hide a heading to pass this check.
+- Also flag headings that skip levels for styling (an `<h4>` straight after the `<h1>`). With the code, fix the tags and keep the look with CSS (**fixed**).
+
+### F4. Add FAQ schema
+- Only for pages that already show questions and answers to the visitor. Never add FAQ markup for questions that are not on the page, and never invent questions.
+- Page has a visible FAQ but no `FAQPage` in its JSON-LD: with the code, add it, copying the questions and answers word for word (**fixed**).
+- Page has no FAQ: **skipped** for that page. If it is a pricing, product or service page, suggest 3 to 5 real questions the owner hears from customers and let them write the answers.
+- Tell the owner straight: Google now shows FAQ rich results for very few sites, so this is mostly for Bing and AI answers, which read the question and answer pairs.
+- **needs you**: search.google.com/test/rich-results, paste the URL, check it reads the FAQ with no errors.
+
+### F5. Add breadcrumbs
+- Any page deeper than one level (`/blog/post`, `/products/shoes/red`) should show a breadcrumb trail a visitor can click, and carry `BreadcrumbList` JSON-LD that matches it (W4 checks the schema, this checks both).
+- **broken**: no trail on deep pages, a trail with no schema, or schema whose names or URLs do not match the visible trail.
+- A flat site (homepage plus a few top-level pages) does not need them: **skipped**.
+- With the code: add one breadcrumb component to the shared layout for deep routes and generate the schema from the same data (**fixed**).
+
+### F6. Link the orphan pages
+- An orphan is a page that is in the sitemap but that no other page links to. Build the list: every sitemap URL, minus every URL that appears as an internal link on the pages you fetched (nav, footer and body).
+- Say how many pages you crawled so the owner knows how sure the list is. If you checked 50 of 400 pages, call the result a sample.
+- For each orphan, suggest 1 to 3 pages that should link to it and the words to link from. With the code, add those links (**fixed**).
+- Pages that should not rank at all (thank-you pages, old campaign pages) should come out of the sitemap instead.
+
+### F7. Alt text on every image
+- List every `<img>` with no `alt` attribute. Images that carry meaning (product shots, screenshots, charts, team photos) need a short plain description of what is in them. Decorative images (dividers, background shapes) get an empty `alt=""`, which is correct, not missing.
+- Flag alt text that is a file name ("IMG_2231.jpg"), a keyword list, or the same on every image.
+- With the code: write the alt text from what the image shows and the page it sits on (**fixed**). Without the image itself, do not guess what is in it: list those as **check**.
+
+### F8. Convert the images to WebP
+- For each image over about 100 KB, note its format and size (`curl -sI` gives content-type and content-length).
+- **broken**: big JPEG or PNG photos, images served far wider than they are shown, no `width` and `height` on the tag, and images below the fold with no `loading="lazy"`.
+- With the code: convert to WebP (or AVIF), keeping the original as a fallback where the framework needs one. Use the framework's image component if it has one (Next.js `next/image`, Astro `<Image>`, Nuxt Image), because it also sizes and lazy-loads (**fixed**). Report the before and after sizes.
+- SVG logos and icons stay as SVG.
+
+### F9. Fix the layout shift
+- Layout shift is the page jumping while it loads. Look for the causes in the HTML and CSS: images, video and embeds with no `width` and `height` (or CSS `aspect-ratio`), web fonts loaded with no `font-display`, banners and cookie bars injected above the content, ads or widgets with no reserved space.
+- With the code: add the dimensions, reserve the space, set `font-display: swap` or `optional` (**fixed**).
+- **needs you** for the real number: pagespeed.web.dev, paste the URL, read CLS. Google counts 0.1 or less as good. You cannot measure it from a fetch, so never state a CLS number you did not get from the owner.
+
+### F10. Get it loading in under 2 seconds
+- Measure what you can: `curl -o /dev/null -s -w '%{time_starttransfer} %{time_total}' <url>` gives the server response time and the HTML download time. A first byte over about 0.8 seconds is a server or hosting problem: say so.
+- Then look for the usual weight: images (F8), render-blocking scripts in the `<head>`, big JavaScript bundles, fonts from several hosts, third-party tags that load before the content, no caching headers, no compression.
+- With the code: defer or remove what blocks rendering, lazy-load below-the-fold parts, set cache headers, and say what each change does (**fixed**).
+- **needs you** for the real number: pagespeed.web.dev, read LCP on mobile. Google counts 2.5 seconds or less as good. Report it as "your server answered in X seconds from here", never as a promised load time.
+
+### F11. Remove the filler and fake AI content
+- No tool can reliably tell AI text from human text, so do not claim to detect it. Flag what a reader would call filler:
+  - placeholder text left in (lorem ipsum, "Your tagline here", "Feature one"),
+  - numbers, awards, customer names or testimonials with no source on the page or the site,
+  - pages that say the same thing as another page in other words,
+  - paragraphs that could sit on any company's site ("In today's fast-paced digital world").
+- For each one, quote the line and say what should replace it: a real number, a real customer, a specific detail of the product. Ask the owner for the fact. Never write a fake one.
+- With the code: remove placeholders and merge duplicate pages with a 301 from the weaker one (**fixed**). Rewrites of real claims are **needs you**.
+
+### F12. Add an author bio
+- For blog posts and guides: the post should show the author's name, a one or two line bio saying why they know this topic, and a link to an author or about page. The `Article` schema's `author` should be a `Person` with a `name` and a `url`.
+- **broken**: no author, "admin" or the company name as the author, or an author with no page anywhere on the site.
+- With the code: add the bio block to the post template and the `Person` to the schema (**fixed**). The bio text itself is **needs you**: ask for the real person's role and experience. Never invent credentials.
+- Sites with no articles: **skipped**.
+
+### F13. Get backlinks
+- Be honest first: no skill can produce backlinks, and nobody can promise one from Forbes. Never suggest buying links or link exchanges.
+- What you can do: list the links this site can actually earn, from what it is. Pick the ones that fit:
+  - the Product Hunt launch (item 9) and G2 or Capterra (W9),
+  - the founder's and company's own profiles (LinkedIn company page, X, GitHub, Crunchbase), each linking to the site,
+  - partners, tools it integrates with, customers and suppliers who already mention it,
+  - one piece worth linking to: its own data, a free tool, a clear how-to nobody else has written.
+- If the user has a backlink export or Search Console's Links report, read it and list who links now.
+- **needs you**: give the list as steps, most likely first, with the page on the site each one should point to.
+
+### F14. Get listed on directories
+- Pick directories by what the business is, not a list of 200:
+  - a business with a physical location or a service area: Google Business Profile and Bing Places first, then Apple Business Connect, then the 2 or 3 directories its own trade uses,
+  - software: G2 and Capterra (W9), then Product Hunt, AlternativeTo and the marketplace of any platform it plugs into,
+  - any company: LinkedIn company page and Crunchbase.
+- Write the listing text once from what the site says: name, one-line description, categories, address and phone exactly as they appear on the site. The name, address and phone must match everywhere.
+- **needs you**: the list, in order, with the sign-up page for each.
+- Skip paid "submit to 500 directories" services. Say so if the user asks about them.
+
+### "Rank me number 1 by Friday, make no mistakes"
+If the user asks for a ranking by a date, say it plainly: nobody controls where Google ranks a page or when, and this skill does not either. What it does is remove every reason on this list for Google to ignore the site. Then give the scoreboard.
+
 ## Output
 
-1. **Scoreboard**: one table, every item you ran (1 to 10, then W1 to W10 for a week-old site): #, item, status, one line on what you found.
+1. **Scoreboard**: one table, every item you ran (1 to 10, then W1 to W10 for a week-old site, then F1 to F14 if part 3 ran): #, item, status, one line on what you found.
 2. **What I fixed**: file by file (skip if you had no code).
 3. **Your clicks**: only the **needs you** steps, numbered, in order, so the owner can do them in one sitting.
 4. **Still broken**: anything **broken** or **check**, with the exact change to make.
@@ -168,3 +280,4 @@ Same ground rules, same statuses. By now Google has had a week to crawl, so this
 
 Launch day (part 1 only): end with "Run this again in a week and I'll check Google has picked up your pages."
 Week 1 or later (part 2 ran): end with "Run this again in a month: Search Console will have real queries by then."
+Full pass (part 3 ran): end with the count of items done, fixed, needs you and broken, then "Do the clicks list, then run this again in 2 weeks."

@@ -1,4 +1,4 @@
-# launch-seo: the 10 things to do right after your website goes live (+ week 1)
+# launch-seo: the 10 things to do right after your website goes live (+ week 1 + the full SEO pass)
 
 by Jeet Bhanushali (@iojeet), iojeet.com
 
@@ -7,6 +7,8 @@ by Jeet Bhanushali (@iojeet), iojeet.com
 Give Claude your website and it works through the 10 things every new site needs so Google, Bing and ChatGPT can find it: Google Search Console, Google Analytics, noindex tags, robots.txt, your sitemap, www vs non-www, page titles and descriptions, Bing Webmaster Tools, a Product Hunt launch and a scorebadge. It checks each one on your live site. If you give it your code, it fixes what it can. For the parts that need your login, it gives you the exact clicks. You get a scoreboard of all 10, a list of what it fixed, and one list of clicks to do in a single sitting.
 
 **Week 1 (new):** run it again a week after launch and it adds 10 more checks: server-side rendering (does a crawler see your content or a blank page), site: index coverage, Microsoft Clarity, schema, Open Graph tags, linking Search Console to GA4, 404s, your forms, G2 and Capterra (software only) and a scorebadge audit.
+
+**The full SEO pass (new):** the rest of the list people throw at Claude in one prompt. Ask for it and it adds 14 more: redirect chains, canonical tags, one H1 per page, FAQ schema, breadcrumbs, orphan pages, alt text, WebP images, layout shift, load time, filler content, author bios, backlinks and directories. It fixes what lives in your code. For backlinks, directories and page speed scores it tells you the truth: what it can't do for you, and the exact steps that are yours. It will not promise you a ranking by Friday.
 
 ## Disclosure
 
@@ -40,6 +42,12 @@ Site live for a week already? Say so:
 
 ```
 My site went live a week ago. Run launch-seo on https://www.yoursite.com
+```
+
+Want everything in one go?
+
+```
+Google isn't showing my website. Run the full launch-seo pass on https://www.yoursite.com
 ```
 
 See a full run on mavek.ai: [example-output-mavek.md](example-output-mavek.md)
